@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI SQL Debugging Agent</title>
+
+    <link
+        rel="stylesheet"
+        href="STYLE.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="masthead">
+
+        <div class="masthead-mark">
+
+            <span class="dot"></span>
+
+            AI SQL DEBUGGING AGENT
+
+        </div>
+
+
+        <h1>
+            SQL Debugging Assistant
+        </h1>
+
+
+        <p class="masthead-sub">
+
+            Analyze SQL queries, detect errors,
+            generate corrections, explain mistakes,
+            and improve your SQL.
+
+        </p>
+
+    </header>
+
+
+    <!-- =========================================
+         SQL EDITOR
+    ========================================== -->
+
+    <section class="window">
+
+        <div class="window-bar">
+
+            <div class="traffic-lights">
+
+                <span class="tl red"></span>
+                <span class="tl amber"></span>
+                <span class="tl green"></span>
+
+            </div>
+
+
+            <span class="window-title">
+                sql-editor
+            </span>
+
+
+            <span
+                id="status"
+                class="window-status"
+            >
+                ready
+            </span>
+
+        </div>
+
+
+        <div class="editor-body">
+
+
+            <!-- LINE NUMBERS -->
+
+            <div
+                class="gutter"
+                id="lineNumbers"
+            >
+
+                <span>1</span>
+
+            </div>
+
+
+            <!-- SQL INPUT -->
+
+            <textarea
+                id="sqlQuery"
+                spellcheck="false"
+                placeholder="Enter your SQL query here...
+
+Example:
+
+SELECT name FORM users WHERE age > 18;"
+            ></textarea>
+
+
+        </div>
+
+
+        <!-- EDITOR FOOTER -->
+
+        <div class="window-footer">
+
+            <div class="footer-hint">
+
+                Press
+                <kbd>Ctrl</kbd>
+                +
+                <kbd>Enter</kbd>
+                to debug
+
+            </div>
+
+
+            <div class="footer-actions">
+
+                <button
+                    class="btn-ghost"
+                    id="clearBtn"
+                    type="button"
+                >
+                    Clear
+                </button>
+
+
+                <button
+                    class="btn-primary"
+                    id="debugBtn"
+                    type="button"
+                >
+
+                    <span class="btn-icon">
+                        ▶
+                    </span>
+
+                    Debug SQL
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         DEBUG CONSOLE
+    ========================================== -->
+
+    <section class="window">
+
+        <div class="window-bar">
+
+            <div class="traffic-lights">
+
+                <span class="tl red"></span>
+                <span class="tl amber"></span>
+                <span class="tl green"></span>
+
+            </div>
+
+
+            <span class="window-title">
+                debug-console
+            </span>
+
+        </div>
+
+
+        <div class="console-body">
+
+
+            <!-- EMPTY STATE -->
+
+            <div
+                id="consoleEmpty"
+                class="console-empty"
+            >
+
+                Enter a SQL query above and click
+                <strong>Debug SQL</strong>
+                to see the analysis.
+
+            </div>
+
+
+            <!-- RESULTS -->
+
+            <div
+                id="resultGrid"
+                class="result-grid"
+                hidden
+            >
+
+
+                <!-- ERROR -->
+
+                <div
+                    class="result-row"
+                    data-kind="error"
+                >
+
+                    <div class="result-label">
+
+                        <span class="chip chip-error">
+                            ERROR
+                        </span>
+
+                        Detected Error
+
+                    </div>
+
+
+                    <p
+                        id="errorResult"
+                        class="result-value"
+                    ></p>
+
+                </div>
+
+
+                <!-- CORRECTED QUERY -->
+
+                <div
+                    class="result-row"
+                    data-kind="fix"
+                >
+
+                    <div class="result-label">
+
+                        <span class="chip chip-fix">
+                            FIX
+                        </span>
+
+                        Corrected Query
+
+                    </div>
+
+
+                    <pre
+                        id="correctedResult"
+                        class="result-code"
+                    ></pre>
+
+                </div>
+
+
+                <!-- EXPLANATION -->
+
+                <div
+                    class="result-row"
+                    data-kind="explain"
+                >
+
+                    <div class="result-label">
+
+                        <span class="chip chip-explain">
+                            INFO
+                        </span>
+
+                        Explanation
+
+                    </div>
+
+
+                    <p
+                        id="explanationResult"
+                        class="result-value"
+                    ></p>
+
+                </div>
+
+
+                <!-- SUGGESTION -->
+
+                <div
+                    class="result-row"
+                    data-kind="suggest"
+                >
+
+                    <div class="result-label">
+
+                        <span class="chip chip-suggest">
+                            TIP
+                        </span>
+
+                        Suggestion
+
+                    </div>
+
+
+                    <p
+                        id="suggestionResult"
+                        class="result-value"
+                    ></p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         HISTORY
+    ========================================== -->
+
+    <section class="history">
+
+        <div class="history-head">
+
+            <h2>
+                Debugging History
+            </h2>
+
+
+            <button
+                id="clearHistoryBtn"
+                class="btn-ghost btn-small"
+                type="button"
+            >
+                Clear History
+            </button>
+
+        </div>
+
+
+        <div
+            id="historyEmpty"
+            class="history-empty"
+        >
+            No debugging history yet.
+        </div>
+
+
+        <div
+            id="historyList"
+            class="history-list"
+        ></div>
+
+    </section>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="page-footer">
+
+        <p>
+            AI SQL Debugging Agent —
+            SQL error detection and correction.
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+<script src="SCRIPT.js"></script>
+
+</body>
+
+</html>
